@@ -21,10 +21,20 @@ model User {
   email     String   @unique
   password  String
   expenses  Expense[]
+  incomes   Income[]
 }
 
 // Define your own datamodels here and run `prisma generate` to deploy changes. 
 model Expense {
+  id          String  @id @default(uuid())
+  userId      String
+  user        User    @relation(fields: [userId], references: [id])
+  description String
+  amount      Float
+  date        DateTime
+}
+
+model Income {
   id          String  @id @default(uuid())
   userId      String
   user        User    @relation(fields: [userId], references: [id])
