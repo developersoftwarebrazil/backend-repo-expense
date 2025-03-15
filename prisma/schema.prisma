@@ -25,6 +25,15 @@ model User {
 }
 
 // Define your own datamodels here and run `prisma generate` to deploy changes. 
+
+enum PaymentType {
+  CASH
+  CREDIT_CARD
+  DEBIT_CARD
+  PIX
+  BOLETO
+  TRANSFER
+}
 model Expense {
   id          String  @id @default(uuid())
   userId      String
@@ -32,6 +41,8 @@ model Expense {
   description String
   amount      Float
   date        DateTime
+  paymentType   PaymentType
+  installments  Installment[]
 }
 
 model Income {
@@ -41,4 +52,13 @@ model Income {
   description String
   amount      Float
   date        DateTime
+  paymentType   PaymentType
+}
+model Installment {
+  id         String   @id @default(uuid())
+  expenseId  String
+  expense    Expense  @relation(fields: [expenseId], references: [id])
+  amount     Float
+  dueDate    DateTime
+  isPaid     Boolean  @default(false)
 }
